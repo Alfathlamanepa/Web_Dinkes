@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Utama</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Gaya dasar body */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow: hidden; 
+            /* Gambar latar belakang dengan animasi zoom */
+            background-image: url('{{ asset('images/kesehatan.jpg') }}');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            animation: zoom-in-out 20s infinite;
+        }
+        
+        /* Animasi zoom untuk gambar latar belakang */
+        @keyframes zoom-in-out {
+            0% { background-size: 100% 100%; }
+            50% { background-size: 110% 110%; }
+            100% { background-size: 100% 100%; }
+        }
+        
+        /* Overlay gradien di atas gambar latar belakang */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Gradien animasi yang tumpang tindih */
+            background: linear-gradient(-45deg, rgba(180, 234, 234, 0.5), rgba(80, 173, 168, 0.5), rgba(75, 232, 224, 0.5), rgba(19, 169, 169, 0.5));
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            z-index: -1;
+        }
+        
+        /* Animasi pergerakan gradien */
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Gaya untuk logo di header */
+        .header-logos {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header-logos img {
+            height: 80px;
+            width: auto;
+        }
+
+        /* Gaya untuk judul utama */
+        .main-content {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .main-content h1 {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            line-height: 1.2;
+        }
+        .main-content h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2rem;
+        }
+
+        /* Gaya untuk kontainer menu */
+        .menu-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Gaya untuk setiap item menu */
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease-in-out;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            color: #333;
+        }
+        .menu-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Gaya untuk ikon menu */
+        .menu-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            background-color: #20b2aa;
+            border-radius: 50%;
+        }
+        .menu-icon i {
+            color: #fff;
+            font-size: 35px;
+        }
+        
+        /* Media Query untuk perangkat mobile */
+        @media (max-width: 640px) {
+            .header-logos {
+                top: 15px;
+                left: 15px;
+                gap: 10px;
+            }
+            .header-logos img {
+                height: 50px;
+            }
+            .main-content {
+                padding: 50px 10px 0;
+            }
+            .main-content h1 {
+                font-size: 6vw;
+            }
+            .main-content h2 {
+                font-size: 3vw;
+                margin-bottom: 1rem;
+            }
+            .menu-options {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                max-width: 300px;
+            }
+            .menu-item {
+                padding: 12px;
+            }
+            .menu-icon {
+                width: 50px;
+                height: 50px;
+            }
+            .menu-icon i {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="header-logos">
+        <img src="{{ asset('images/Logo Batu.png') }}" alt="Logo Kota Batu" class="logo-kota-batu">
+        <img src="{{ asset('images/Germas.png') }}" alt="Logo Germas" class="logo-germas">
+    </div>
+
+    <div class="main-content">
+        <h1>VERIFIKASI DATA BALITA</h1>
+        <h2>DINKES</h2>
+        <div class="menu-options">
+            <a href="{{ route('balitas.search') }}" class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <span>Cari Balita</span>
+            </a>
+            <a href="{{ route('balitas.index') }}" class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-list-ul"></i>
+                </div>
+                <span>Tampilkan Data</span>
+            </a>
+            <a href="{{ route('balitas.create') }}" class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <span>Tambah Balita</span>
+            </a>
+            <a href="{{ route('balitas.status') }}" class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <span>Status Balita</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
