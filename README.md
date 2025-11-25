@@ -77,7 +77,7 @@ Kelas B -202210370311479 - Muhammad Nafis - Nafis9119
 
 Kelas B -202210370311487- Nama - 2cooll
 
-Kelas B -202210370311085- Rekta Cahyo Basunanda -Username github
+Kelas B -202210370311085- Rekta Cahyo Basunanda - Rektaaa
 
 
 
