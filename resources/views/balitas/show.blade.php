@@ -1,303 +1,413 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Detail Data Balita</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Data Balita - {{ $balita->nama_balita }}</title>
+    
+    {{-- Tailwind CSS --}}
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {{-- FontAwesome Icons --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {{-- Google Fonts: Inter --}}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        /* --- GAYA KONSISTEN (Background, Font, Shadows) --- */
         body {
             font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
             background: linear-gradient(-45deg, #008080, #4BCFCA, #87D9D6, #99E600);
             background-size: 400% 400%;
             animation: gradient-animation 15s ease infinite;
+            padding: 1rem;
         }
 
         @keyframes gradient-animation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
+
+        /* Header Logos */
+        .header-logos {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 20;
+        }
+        .header-logos img {
+            height: 80px;
+            width: auto;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        /* Back Button Container */
+        .back-container {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            z-index: 20;
+        }
+
+        /* Page Title (PERBAIKAN POSISI) */
+        .page-title {
+            text-align: center;
+            padding-top: 120px; /* Tambahkan padding agar turun dibawah logo */
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        .page-title h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.1;
+        }
+
+        /* Main Card Container */
+        .detail-card {
+            background-color: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+            z-index: 10;
+            margin: 0 auto 50px auto; /* Margin auto agar tengah, hapus margin-top: 100px */
+        }
+
+        /* --- CUSTOM SHADOWS --- */
+        /* Outer Shadow (Timbul - untuk tombol) */
+        .custom-outer-shadow {
+            box-shadow: 4px 4px 10px -2px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+        .custom-outer-shadow:active {
+            box-shadow: 2px 2px 5px -1px rgba(0, 0, 0, 0.2);
+            transform: scale(0.99);
+        }
+
+        /* Inner Shadow (Tenggelam - untuk data capsule) */
+        .data-capsule {
+            background-color: #e5e7eb; /* Warna abu-abu terang seperti input */
+            border-radius: 0.75rem; /* Rounded-xl */
+            padding: 0.75rem 1rem;
+            box-shadow: inset 0px 3px 5px 0px rgba(0, 0, 0, 0.1); 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .data-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #6b7280; /* Gray-500 */
+            margin-bottom: 0.1rem;
+            text-transform: uppercase;
+        }
+        
+        .data-value {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #1f2937; /* Gray-800 */
+        }
+
+        /* Sub-cards (Umur & Lokasi) */
+        .sub-card {
+            background-color: #f9fafb; /* Gray-50 */
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
         /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
-            z-index: 10;
+            z-index: 50;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
             justify-content: center;
             align-items: center;
         }
-        .modal-content {
-            background-color: #fff;
-            margin: auto;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            animation-name: animatetop;
-            animation-duration: 0.4s;
-        }
-        @keyframes animatetop {
-            from {top: -300px; opacity: 0}
-            to {top: 0; opacity: 1}
-        }
-        .close-btn {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close-btn:hover,
-        .close-btn:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+
+        /* Responsive Mobile */
+        @media (max-width: 640px) {
+            .header-logos { top: 15px; left: 15px; gap: 10px; }
+            .header-logos img { height: 40px; }
+            .back-container { top: 15px; right: 15px; }
+            
+            /* Padding khusus mobile agar pas di bawah logo kecil */
+            .page-title { padding-top: 80px; } 
+            .page-title h1 { font-size: 1.8rem; }
+            
+            .detail-card { padding: 1.5rem; border-radius: 1.5rem; width: 95%; }
         }
     </style>
 </head>
-<body class="p-8 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-4xl w-full">
+<body>
+
+    {{-- LOGO HEADER (Kiri Atas) --}}
+    <div class="header-logos">
+        <img src="{{ asset('images/Logo Batu.png') }}" alt="Logo Kota Batu">
+        <img src="{{ asset('images/Germas.png') }}" alt="Logo Germas">
+    </div>
+
+    {{-- TOMBOL KEMBALI (Kanan Atas) --}}
+    <div class="back-container">
+        <a href="{{ request()->query('from') == 'search' ? route('balitas.search', ['nik_balita' => $balita->nik_balita]) : route('balitas.index', ['page' => request()->query('page')]) }}" 
+           class="bg-white/20 hover:bg-white/40 text-white rounded-full w-12 h-12 flex items-center justify-center transition backdrop-blur-sm border border-white/30 custom-outer-shadow">
+            <i class="fas fa-arrow-left text-xl"></i>
+        </a>
+    </div>
+
+    {{-- KONTEN UTAMA --}}
+    <div class="w-full">
+        
+        <div class="page-title">
+            <h1>DETAIL DATA<br>BALITA</h1>
+        </div>
+
         @if ($balita)
-            <div class="flex justify-between items-center border-b pb-4 mb-6">
-                <h1 class="text-3xl font-bold text-gray-800">Detail Balita</h1>
-                
-                {{-- Tombol Kembali yang Cerdas --}}
-                <a href="{{ request()->query('from') == 'search' ? route('balitas.search', ['nik_balita' => $balita->nik_balita]) : route('balitas.index', ['page' => request()->query('page')]) }}" 
-                   class="text-gray-600 hover:text-gray-800 transition duration-200 font-semibold"
-                   title="Kembali ke Halaman Sebelumnya">
-                    <i class="fas fa-arrow-left mr-1"></i> Kembali
-                </a>
-                {{-- Akhir Tombol Kembali Cerdas --}}
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                <div>
-                    <h2 class="text-xl font-semibold text-teal-600 mb-4 border-b pb-2">Data Identitas Balita</h2>
-                    <dl class="space-y-3">
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">NIK Balita</dt>
-                            <dd class="mt-1 text-sm font-semibold text-gray-900 w-2/3">{{ $balita->nik_balita }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Nama Balita</dt>
-                            <dd class="mt-1 text-sm font-semibold text-gray-900 w-2/3">{{ $balita->nama_balita }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Tanggal Lahir</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ \Carbon\Carbon::parse($balita->tgl_lahir)->format('d F Y') }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Umur (Realtime)</dt>
-                            <dd class="mt-1 text-sm font-bold text-teal-600 w-2/3" id="realtime-umur" data-tgl-lahir="{{ $balita->tgl_lahir }}">
-                                <i class="fas fa-spinner fa-spin mr-2 animate-pulse"></i>Menghitung...
-                            </dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Jenis Kelamin</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ $balita->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Nomor KK</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ $balita->nomor_kk ?? '-' }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Status Usia</dt>
-                            <dd class="mt-1 text-sm font-bold w-2/3" id="age-status">Status...</dd>
-                        </div>
-                    </dl>
+        <div class="detail-card animate-fade-in-up">
+            
+            {{-- BAGIAN 1: IDENTITAS UTAMA (Gaya Kapsul Tenggelam) --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {{-- NIK Balita --}}
+                <div class="data-capsule">
+                    <span class="data-label">NIK Balita :</span>
+                    <span class="data-value break-all">{{ $balita->nik_balita }}</span>
                 </div>
-
-                <div>
-                    <h2 class="text-xl font-semibold text-teal-600 mb-4 border-b pb-2">Data Orang Tua & Wilayah</h2>
-                    <dl class="space-y-3">
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Nama Orang Tua</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ $balita->nama_ortu }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">NIK Orang Tua</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ $balita->nik_ortu ?? '-' }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">No. HP Orang Tua</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ $balita->hp_ortu ?? '-' }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Provinsi / Kota</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ $balita->provinsi }} / {{ $balita->kab_kota }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Kecamatan</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ $balita->kec }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Desa / Posyandu</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ $balita->desa_kel }} / {{ $balita->posyandu }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">Puskesmas</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ $balita->puskesmas }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="text-sm font-medium text-gray-500 w-1/3">RT / RW</dt>
-                            <dd class="mt-1 text-sm text-gray-900 w-2/3">{{ $balita->rt ?? '-' }} / {{ $balita->rw ?? '-' }}</dd>
-                        </div>
-                    </dl>
+                {{-- Nama Balita --}}
+                <div class="data-capsule">
+                    <span class="data-label">Nama Balita :</span>
+                    <span class="data-value uppercase">{{ $balita->nama_balita }}</span>
+                </div>
+                {{-- Jenis Kelamin --}}
+                 <div class="data-capsule">
+                    <span class="data-label">Jenis Kelamin :</span>
+                    <span class="data-value">{{ $balita->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</span>
+                </div>
+                {{-- Tanggal Lahir --}}
+                <div class="data-capsule">
+                    <span class="data-label">Tanggal Lahir :</span>
+                    <span class="data-value">{{ \Carbon\Carbon::parse($balita->tgl_lahir)->format('d F Y') }}</span>
+                </div>
+                 {{-- Nama Ortu --}}
+                 <div class="data-capsule">
+                    <span class="data-label">Nama Ortu :</span>
+                    <span class="data-value uppercase">{{ $balita->nama_ortu }}</span>
+                </div>
+                {{-- NIK Ortu --}}
+                <div class="data-capsule">
+                    <span class="data-label">NIK Ortu :</span>
+                    <span class="data-value break-all">{{ $balita->nik_ortu ?? '-' }}</span>
+                </div>
+                 {{-- No HP Ortu --}}
+                 <div class="data-capsule">
+                    <span class="data-label">No. HP Ortu :</span>
+                    <span class="data-value">{{ $balita->hp_ortu ?? '-' }}</span>
+                </div>
+                {{-- Nomor KK --}}
+                <div class="data-capsule">
+                    <span class="data-label">Nomor KK :</span>
+                    <span class="data-value break-all">{{ $balita->nomor_kk ?? '-' }}</span>
                 </div>
             </div>
 
-            <div class="mt-8 border-t pt-4">
-                <h2 class="text-xl font-semibold text-teal-600 mb-4 border-b pb-2">Informasi Waktu Data</h2>
-                <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
-                    <div>
-                        <dt class="text-sm font-medium text-gray-500">Data Dibuat Pada (created_at)</dt>
-                        <dd class="mt-1 text-sm font-semibold text-gray-900">
-                            {{ $balita->created_at ? $balita->created_at->format('d F Y, H:i:s') : 'N/A' }}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt class="text-sm font-medium text-gray-500">Terakhir Diubah Pada (updated_at)</dt>
-                        <dd class="mt-1 text-sm font-semibold text-gray-900">
-                            {{ $balita->updated_at ? $balita->updated_at->format('d F Y, H:i:s') : 'N/A' }}
-                        </dd>
-                    </div>
-                </dl>
+            {{-- INFO TERAKHIR DIEDIT --}}
+            <div class="data-capsule mb-6 text-center py-2">
+                <span class="text-xs font-bold text-gray-500">
+                    Terakhir Diedit : {{ $balita->updated_at ? $balita->updated_at->format('d-m-Y H:i:s') : '-' }}
+                </span>
             </div>
-            <div class="mt-8 flex justify-end space-x-4">
-                <a href="{{ route('balitas.edit', ['balita' => $balita->nik_balita, 'from' => request('from'), 'page' => request('page')]) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {{-- BAGIAN 2: UMUR BALITA --}}
+                <div class="sub-card">
+                    <h3 class="font-black text-gray-700 text-lg mb-3 flex items-center">
+                        <i class="fas fa-calendar-alt mr-2 text-[#009688]"></i> Umur Balita
+                    </h3>
+                    
+                    {{-- Banner Umur --}}
+                    <div id="umur-badge" class="rounded-full py-3 px-4 text-center custom-outer-shadow mb-3 transition-colors duration-500">
+                        <span id="realtime-umur" data-tgl-lahir="{{ $balita->tgl_lahir }}" class="text-white font-black text-xl">
+                            <i class="fas fa-spinner fa-spin animate-pulse text-sm"></i> Menghitung...
+                        </span>
+                    </div>
+                    
+                    {{-- Status Umur --}}
+                    <p id="age-status" class="text-center text-sm font-bold">
+                        Status...
+                    </p>
+                </div>
+
+                {{-- BAGIAN 3: LOKASI --}}
+                <div class="sub-card">
+                    <h3 class="font-black text-gray-700 text-lg mb-3 flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2 text-[#009688]"></i> Lokasi
+                    </h3>
+                    <div class="space-y-2 text-sm font-bold text-gray-600">
+                        <p><span class="text-gray-400 w-24 inline-block">RT/RW:</span> {{ $balita->rt ?? '-' }}/{{ $balita->rw ?? '-' }}</p>
+                        <p><span class="text-gray-400 w-24 inline-block">Desa/Kel:</span> {{ $balita->desa_kel }}</p>
+                        <p><span class="text-gray-400 w-24 inline-block">Kecamatan:</span> {{ $balita->kec }}</p>
+                        <p><span class="text-gray-400 w-24 inline-block">Puskesmas:</span> {{ $balita->puskesmas }}</p>
+                        <p><span class="text-gray-400 w-24 inline-block">Posyandu:</span> {{ $balita->posyandu }}</p>
+                        <p><span class="text-gray-400 w-24 inline-block">Kab/Kota:</span> {{ $balita->kab_kota }}</p>
+                        <p><span class="text-gray-400 w-24 inline-block">Provinsi:</span> {{ $balita->provinsi }}</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- TOMBOL AKSI --}}
+            <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
+                <a href="{{ route('balitas.edit', ['balita' => $balita->nik_balita, 'from' => request('from'), 'page' => request('page')]) }}" 
+                   class="flex-1 bg-[#009688] hover:bg-[#00796b] text-white font-black py-3 px-4 rounded-xl custom-outer-shadow transition text-center flex items-center justify-center uppercase tracking-wider text-sm sm:text-base">
                     <i class="fas fa-edit mr-2"></i> Edit Data
                 </a>
                 
-                {{-- Tombol untuk memicu Modal Hapus --}}
-                <button type="button" id="delete-button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200">
+                <button type="button" id="delete-button" 
+                        class="flex-1 bg-red-500 hover:bg-red-600 text-white font-black py-3 px-4 rounded-xl custom-outer-shadow transition text-center flex items-center justify-center uppercase tracking-wider text-sm sm:text-base">
                     <i class="fas fa-trash-alt mr-2"></i> Hapus Data
                 </button>
             </div>
 
-            <div id="deleteModal" class="modal">
-                <div class="modal-content">
-                    <div class="p-4 text-center">
-                        <i class="fas fa-trash-alt text-red-600 text-5xl mb-4"></i>
-                        <p class="text-xl text-gray-800 font-semibold mb-2">Konfirmasi Hapus</p>
-                        <p class="text-gray-500 mb-6">Apakah Anda yakin ingin menghapus data balita ini?</p>
-                        <div class="flex justify-center space-x-4">
-                            <form id="delete-form-modal" method="POST" action="{{ route('balitas.destroy', $balita->nik_balita) }}">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="page" value="{{ request('page') }}">
-                                <button type="submit" class="bg-red-600 text-white font-bold px-6 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200">
-                                    Ya, Hapus
-                                </button>
-                            </form>
-                            <button id="cancel-delete-btn" class="bg-gray-400 text-white font-bold px-6 py-2 rounded-lg hover:bg-gray-500 transition-colors duration-200">
-                                Batal
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- Akhir Modal Konfirmasi Hapus --}}
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    // Logika Umur (Dipertahankan sama)
-                    const realtimeUmurElement = document.getElementById('realtime-umur');
-                    const ageStatusElement = document.getElementById('age-status');
-                    const tglLahir = realtimeUmurElement.getAttribute('data-tgl-lahir');
-                    const birthDate = new Date(tglLahir);
-                    
-                    if (!isNaN(birthDate.getTime())) {
-                        const calculateAge = () => {
-                            const today = new Date();
-                            let totalMonths = 0;
-                            let isOverAge = false;
-
-                            let birthYear = birthDate.getFullYear();
-                            let birthMonth = birthDate.getMonth();
-                            let birthDay = birthDate.getDate();
-
-                            let currentYear = today.getFullYear();
-                            let currentMonth = today.getMonth();
-                            let currentDay = today.getDate();
-
-                            totalMonths = (currentYear - birthYear) * 12 + (currentMonth - birthMonth);
-
-                            if (currentDay < birthDay) {
-                                totalMonths--;
-                            }
-                            
-                            if (totalMonths >= 60) {
-                                isOverAge = true;
-                            }
-
-                            let diffMonths = totalMonths;
-                            let diffDays = currentDay - birthDay;
-
-                            if (diffDays < 0) {
-                                diffMonths--;
-                                let tempDate = new Date(today);
-                                tempDate.setDate(0);
-                                diffDays = tempDate.getDate() - birthDay + currentDay;
-                            }
-                            
-                            realtimeUmurElement.textContent = `${diffMonths} bulan ${diffDays} hari`;
-                            realtimeUmurElement.classList.remove('animate-pulse');
-                
-                            if (isOverAge) {
-                                ageStatusElement.textContent = 'Usia balita sudah lewat dari batas aman (≥ 60 bulan).';
-                                ageStatusElement.classList.add('text-red-600');
-                                ageStatusElement.classList.remove('text-blue-500', 'text-yellow-500');
-                            } else if (totalMonths >= 58 && totalMonths < 60) {
-                                ageStatusElement.textContent = 'Usia balita mendekati batas aman (58-59 bulan).';
-                                ageStatusElement.classList.add('text-yellow-600');
-                                ageStatusElement.classList.remove('text-blue-500', 'text-red-500');
-                            } else {
-                                ageStatusElement.textContent = 'Usia balita masih dalam batas aman (< 58 bulan).';
-                                ageStatusElement.classList.add('text-blue-600');
-                                ageStatusElement.classList.remove('text-red-500', 'text-yellow-500');
-                            }
-                        };
-                        calculateAge();
-                    }
-
-
-                    // Logika Modal Hapus
-                    const deleteModal = document.getElementById('deleteModal');
-                    const deleteButton = document.getElementById('delete-button');
-                    const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
-                    
-                    deleteButton.addEventListener('click', function() {
-                        deleteModal.style.display = 'flex';
-                    });
-
-                    cancelDeleteBtn.addEventListener('click', function() {
-                        deleteModal.style.display = 'none';
-                    });
-
-                    window.onclick = function(event) {
-                        if (event.target == deleteModal) {
-                            deleteModal.style.display = 'none';
-                        }
-                    };
-                });
-            </script>
+        </div>
         @else
-            <p class="text-gray-600 text-center">Data balita tidak ditemukan.</p>
+            <div class="detail-card text-center py-10">
+                <i class="fas fa-exclamation-triangle text-yellow-500 text-5xl mb-4"></i>
+                <h2 class="text-2xl font-bold text-gray-700">Data tidak ditemukan</h2>
+            </div>
         @endif
     </div>
+
+    {{-- MODAL HAPUS --}}
+    <div id="deleteModal" class="modal">
+        <div class="bg-white rounded-[2rem] p-8 max-w-sm w-full text-center shadow-2xl animate-fade-in-up m-4">
+            <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-red-100 mb-6">
+                <i class="fas fa-trash-alt text-red-500 text-4xl"></i>
+            </div>
+            <h3 class="text-xl font-black text-gray-900 mb-2">Hapus Data Balita?</h3>
+            <p class="text-gray-500 mb-6 text-sm">
+                Anda yakin ingin menghapus data balita <strong>{{ $balita->nama_balita }}</strong>? Tindakan ini tidak dapat dibatalkan.
+            </p>
+            
+            <div class="flex flex-col gap-3">
+                <form id="delete-form-modal" method="POST" action="{{ route('balitas.destroy', $balita->nik_balita) }}" class="w-full">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="page" value="{{ request('page') }}">
+                    <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl custom-outer-shadow transition">
+                        Ya, Hapus Permanen
+                    </button>
+                </form>
+                <button id="cancel-delete-btn" class="w-full bg-gray-200 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-300 transition custom-outer-shadow">
+                    Batal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- SCRIPT (LOGIKA STATUS & UMUR) --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Elemen HTML ---
+            const realtimeUmurElement = document.getElementById('realtime-umur');
+            const ageStatusElement = document.getElementById('age-status');
+            const umurBadge = document.getElementById('umur-badge'); 
+            
+            // Pengecekan elemen
+            if (realtimeUmurElement && ageStatusElement && umurBadge) {
+                const tglLahir = realtimeUmurElement.getAttribute('data-tgl-lahir');
+                const birthDate = new Date(tglLahir);
+                
+                if (!isNaN(birthDate.getTime())) {
+                    const calculateAge = () => {
+                        const today = new Date();
+                        
+                        // 1. Hitung Selisih
+                        let birthYear = birthDate.getFullYear();
+                        let birthMonth = birthDate.getMonth();
+                        let birthDay = birthDate.getDate();
+
+                        let currentYear = today.getFullYear();
+                        let currentMonth = today.getMonth();
+                        let currentDay = today.getDate();
+
+                        let totalMonths = (currentYear - birthYear) * 12 + (currentMonth - birthMonth);
+
+                        if (currentDay < birthDay) {
+                            totalMonths--;
+                        }
+
+                        let diffDays = currentDay - birthDay;
+                        if (diffDays < 0) {
+                            let daysInLastMonth = new Date(currentYear, currentMonth, 0).getDate();
+                            diffDays = daysInLastMonth + diffDays;
+                        }
+                        
+                        // 2. Tampilkan Teks
+                        realtimeUmurElement.innerHTML = `${totalMonths} Bulan, ${diffDays} Hari`;
+            
+                        // 3. Logika Warna (Reset)
+                        umurBadge.className = 'rounded-full py-3 px-4 text-center custom-outer-shadow mb-3 transition-colors duration-500';
+                        ageStatusElement.className = 'text-center text-sm font-bold';
+
+                        // --- ATURAN ---
+                        if (totalMonths >= 60) {
+                            // LEWAT BATAS (>= 60) -> MERAH
+                            umurBadge.classList.add('bg-red-500');
+                            ageStatusElement.textContent = 'Usia balita sudah lewat dari batas aman (≥ 60 bulan).';
+                            ageStatusElement.classList.add('text-red-600');
+
+                        } else if (totalMonths >= 58) { 
+                            // HAMPIR BATAS (58-59) -> KUNING
+                            umurBadge.classList.add('bg-yellow-400'); 
+                            ageStatusElement.textContent = 'Hati-hati! Usia balita mendekati batas aman (58-59 bulan).';
+                            ageStatusElement.classList.add('text-yellow-600');
+
+                        } else {
+                            // AMAN (< 58) -> HIJAU TEAL
+                            umurBadge.classList.add('bg-[#4BCFCA]');
+                            ageStatusElement.textContent = 'Usia Balita masih dalam batas aman.';
+                            ageStatusElement.classList.add('text-[#009688]');
+                        }
+                    };
+                    
+                    calculateAge();
+                } else {
+                    realtimeUmurElement.innerHTML = 'Tanggal Lahir Invalid';
+                }
+            }
+
+            // --- Modal Hapus ---
+            const deleteModal = document.getElementById('deleteModal');
+            const deleteButton = document.getElementById('delete-button');
+            const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+            
+            if (deleteButton && deleteModal && cancelDeleteBtn) {
+                deleteButton.addEventListener('click', function() { deleteModal.style.display = 'flex'; });
+                cancelDeleteBtn.addEventListener('click', function() { deleteModal.style.display = 'none'; });
+                window.onclick = function(event) {
+                    if (event.target == deleteModal) { deleteModal.style.display = 'none'; }
+                };
+            }
+        });
+    </script>
 </body>
 </html>
