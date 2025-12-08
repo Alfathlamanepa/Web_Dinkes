@@ -1,344 +1,314 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status Usia Balita</title>
+    
+    {{-- Tailwind CSS --}}
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {{-- FontAwesome Icons --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {{-- Google Fonts: Inter --}}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        /* --- GAYA KONSISTEN (Sama dengan index.blade.php) --- */
         body {
             font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
             min-height: 100vh;
             margin: 0;
-            padding: 0;
-            background-color: #4bcfca; 
+            position: relative;
+            background: linear-gradient(-45deg, #008080, #4BCFCA, #87D9D6, #99E600);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            padding: 1rem;
         }
 
-        /* --- STYLES UNTUK MENIRU TAMPILAN APLIKASI DI GAMBAR --- */
-        .app-container {
-            width: 100%;
-            max-width: 450px; 
-            min-height: 100vh;
-            /* Gradien Green-Teal-Cyan yang menyerupai gambar */
-            background: linear-gradient(-45deg, #99E600, #87D9D6, #4BCFCA, #008080);
-            background-size: 100% 200%;
-            background-position: top;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            padding: 0;
-            /* REVISI: Tambahkan padding-bottom agar tombol Home yang tidak fixed tetap terlihat */
-            padding-bottom: 30px; 
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* HEADER */
-        .header-section {
-            padding: 40px 20px 20px 20px; 
-            position: relative;
-        }
-        
-        /* LOGO HEADER (KIRI ATAS) */
-        .header-icon-left {
+        /* Header Logos */
+        .header-logos {
             position: absolute;
-            top: 25px; 
-            left: 20px; 
-            color: white;
-            z-index: 20;
-            display: flex; 
+            top: 25px;
+            left: 25px;
+            display: flex;
             align-items: center;
-            gap: 5px;
-        }
-        
-        /* TOMBOL KEMBALI (KANAN ATAS) */
-        .header-icon-right {
-            position: absolute;
-            top: 25px; 
-            right: 20px; 
+            gap: 15px;
             z-index: 20;
         }
-        
-        /* Aturan untuk gambar di dalam header-icon-left */
-        .header-icon-left img {
-            height: 40px; 
+        .header-logos img {
+            height: 80px;
             width: auto;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
         }
 
-        .header-content {
-            padding-top: 20px;
-            padding-bottom: 20px;
-            text-align: center;
-            color: white;
-            font-size: 2rem;
-            line-height: 1.1;
-            font-weight: 800;
-            letter-spacing: 0.05em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        /* Back Button Container */
+        .back-container {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            z-index: 20;
         }
 
-        /* FILTER CARD */
-        .filter-card {
-            background-color: white;
-            border-radius: 1.5rem; 
-            margin: 0 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Page Title */
+        .page-title {
+            text-align: center;
+            padding-top: 120px;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 10;
         }
-        
-        /* Dropdown Input Kapsul */
-        .pill-dropdown-button {
+        .page-title h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.1;
+        }
+
+        /* Main Card */
+        .index-card {
+            background-color: white;
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             width: 100%;
+            max-width: 1000px; /* Sedikit lebih kecil dari index tabel agar fokus */
+            margin: 0 auto 50px auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Shadows */
+        .custom-outer-shadow {
+            box-shadow: 4px 4px 10px -2px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+        .custom-outer-shadow:active {
+            box-shadow: 2px 2px 5px -1px rgba(0, 0, 0, 0.2);
+            transform: scale(0.99);
+        }
+
+        /* Filter Box */
+        .filter-box {
+            background-color: #f3f4f6;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+        }
+
+        /* Custom Dropdown */
+        .custom-dropdown-container { position: relative; }
+        .custom-dropdown-button {
+            background-color: #e5e7eb;
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.5rem 1rem;
-            border-radius: 9999px; /* Kapsul */
-            border: 1px solid #d1d5db;
-            background-color: white;
             cursor: pointer;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            transition: all 0.2s;
-            font-size: 0.875rem; /* text-sm */
+            font-weight: 600;
+            color: #374151;
+            transition: background 0.2s;
         }
-        
-        .pill-dropdown-button:hover {
-            border-color: #4BCFCA;
-        }
-
+        .custom-dropdown-button:hover { background-color: #d1d5db; }
         .custom-dropdown-options {
             position: absolute;
-            width: 100%;
-            z-index: 10;
-            background-color: white;
-            border-radius: 0.5rem;
-            border: 1px solid #d1d5db;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-height: 180px;
-            overflow-y: auto;
-            top: 100%;
-            left: 0;
-            display: none; 
-            margin-top: 4px;
+            top: 110%; left: 0; width: 100%;
+            background: white; border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 50; display: none;
+            max-height: 250px; overflow-y: auto;
+            padding: 0.5rem;
         }
-
-        .custom-dropdown-options.show {
-            display: block;
-        }
-        
+        .custom-dropdown-options.show { display: block; }
         .custom-dropdown-option {
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 0.875rem;
+            padding: 0.5rem 1rem; border-radius: 0.5rem;
+            cursor: pointer; transition: background 0.1s;
         }
-        
-        .custom-dropdown-option:hover {
-            background-color: #f0f0f0;
-        }
-        
-        /* Tombol Tampilkan */
-        .btn-filter {
-            background-color: #4BCFCA;
-            color: white;
-            font-weight: 700;
-            border-radius: 9999px; /* Kapsul */
-            padding: 0.5rem 1.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.2s;
-        }
+        .custom-dropdown-option:hover { background-color: #f3f4f6; }
 
-        /* RESULT CARDS */
-        .result-card {
-            padding: 1.25rem;
-            border-radius: 1rem;
-            border-width: 2px;
-            transition: all 0.3s ease-in-out;
-            margin-bottom: 1rem;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .card-green {
-            border-color: #10B981; /* green-500 */
-        }
-
-        .card-yellow {
-            border-color: #FBBF24; /* yellow-400 */
-        }
-
-        .card-red {
-            border-color: #EF4444; /* red-500 */
-        }
-        
-        .result-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #1F2937;
-        }
-
-        /* FOOTER HOME BUTTON - Diubah dari fixed ke static/flow */
-        .footer-home {
-            /* Hapus position: fixed, bottom, left, transform */
-            z-index: 30;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            padding: 0.5rem 0;
-            margin-top: 1rem; /* Tambahkan margin atas agar tidak menempel kartu terakhir */
-        }
-
-        /* Gaya Tombol Home: Persegi Panjang Kecil */
-        .home-button {
-            background-color: white;
-            padding: 0.5rem 1rem; 
-            border-radius: 0.5rem; 
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-            font-size: 1.5rem;
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-logos { top: 15px; left: 15px; gap: 10px; }
+            .header-logos img { height: 40px; }
+            .back-container { top: 15px; right: 15px; }
+            .page-title { padding-top: 80px; }
+            .page-title h1 { font-size: 2rem; }
+            .index-card { padding: 1.5rem; border-radius: 1.5rem; width: 95%; }
+            .filter-box { padding: 1.25rem; }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center">
+<body>
 
-    <div class="app-container">
+    {{-- HEADER LOGOS --}}
+    <div class="header-logos">
+        <img src="{{ asset('images/Logo Batu.png') }}" alt="Logo Kota Batu">
+        <img src="{{ asset('images/Germas.png') }}" alt="Logo Germas">
+    </div>
+
+    {{-- TOMBOL KEMBALI --}}
+    <div class="back-container">
+        <a href="{{ url('/') }}" class="bg-white/20 hover:bg-white/40 text-white rounded-full w-12 h-12 flex items-center justify-center transition backdrop-blur-sm border border-white/30 custom-outer-shadow">
+            <i class="fas fa-arrow-left text-xl"></i>
+        </a>
+    </div>
+
+    {{-- KONTEN --}}
+    <div class="w-full">
         
-        {{-- LOGO HEADER (KIRI ATAS) --}}
-        <div class="header-icon-left">
-            <img src="{{ asset('images/Logo Batu.png') }}" alt="Logo Kota Batu">
-            <img src="{{ asset('images/Germas.png') }}" alt="Logo Germas">
-        </div>
-        
-        {{-- TOMBOL KEMBALI (KANAN ATAS) --}}
-        <div class="header-icon-right">
-            <a href="{{ url('/') }}" class="bg-white/20 hover:bg-white/40 text-white rounded-full w-12 h-12 flex items-center justify-center transition backdrop-blur-sm border border-white/30 custom-outer-shadow">
-                <i class="fas fa-arrow-left text-xl"></i> 
-            </a>
-        </div>
-        
-        <div class="header-section">
-            <h1 class="header-content">
-                STATUS USIA
-                <br>
-                BALITA
-            </h1>
+        <div class="page-title">
+            <h1>STATUS USIA BALITA</h1>
         </div>
 
-        {{-- FILTER CARD --}}
-        <div class="filter-card relative z-10 -mt-8">
-            <h2 class="text-base font-semibold text-gray-800 mb-4">Filter Data</h2>
+        <div class="index-card animate-fade-in-up">
             
-            <form action="{{ route('balitas.status') }}" method="GET">
-                <div class="grid grid-cols-3 gap-2">
+            {{-- FILTER SECTION (Diambil dari index.blade.php) --}}
+            <form action="{{ route('balitas.status') }}" method="GET" class="filter-box relative">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Filter Data</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
                     {{-- Kecamatan --}}
                     <div>
-                        <label for="kec" class="block text-xs font-medium text-gray-500 mb-1">Kecamatan</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Kecamatan</label>
                         <div class="custom-dropdown-container">
-                            <input type="hidden" id="kec_val" name="kec" value="{{ request('kec') }}">
-                            <div class="pill-dropdown-button" id="kec_button">
+                            <input type="hidden" id="kec" name="kec" value="{{ request('kec') }}">
+                            <div class="custom-dropdown-button" id="kec_button">
                                 <span id="kec_label" class="truncate">{{ request('kec') ?? 'Semua Kecamatan' }}</span>
-                                <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                <i class="fas fa-chevron-down text-gray-500 ml-2"></i>
                             </div>
                             <div class="custom-dropdown-options" id="kec_options">
                                 <div class="custom-dropdown-option" data-value="">Semua Kecamatan</div>
-                                <div class="custom-dropdown-option" data-value="BATU">BATU</div>
-                                <div class="custom-dropdown-option" data-value="JUNREJO">JUNREJO</div>
-                                <div class="custom-dropdown-option" data-value="BUMIAJI">BUMIAJI</div>
                             </div>
                         </div>
                     </div>
-                    
+
                     {{-- Puskesmas --}}
                     <div>
-                        <label for="puskesmas" class="block text-xs font-medium text-gray-500 mb-1">Puskesmas</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Puskesmas</label>
                         <div class="custom-dropdown-container">
-                            <input type="hidden" id="puskesmas_val" name="puskesmas" value="{{ request('puskesmas') }}">
-                            <div class="pill-dropdown-button" id="puskesmas_button">
+                            <input type="hidden" id="puskesmas" name="puskesmas" value="{{ request('puskesmas') }}">
+                            <div class="custom-dropdown-button" id="puskesmas_button">
                                 <span id="puskesmas_label" class="truncate">{{ request('puskesmas') ?? 'Semua Puskesmas' }}</span>
-                                <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                <i class="fas fa-chevron-down text-gray-500 ml-2"></i>
                             </div>
                             <div class="custom-dropdown-options" id="puskesmas_options">
                                 <div class="custom-dropdown-option" data-value="">Semua Puskesmas</div>
                             </div>
                         </div>
                     </div>
-                    
+
                     {{-- Desa/Kel --}}
                     <div>
-                        <label for="desa_kel" class="block text-xs font-medium text-gray-500 mb-1">Desa/Kel</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Desa/Kel</label>
                         <div class="custom-dropdown-container">
-                            <input type="hidden" id="desa_kel_val" name="desa_kel" value="{{ request('desa_kel') }}">
-                            <div class="pill-dropdown-button" id="desa_kel_button">
-                                <span id="desa_kel_label" class="truncate">{{ request('desa_kel') ?? 'Semua Desa/Kelurahan' }}</span>
-                                <i class="fas fa-chevron-down text-xs ml-1"></i>
+                            <input type="hidden" id="desa_kel" name="desa_kel" value="{{ request('desa_kel') }}">
+                            <div class="custom-dropdown-button" id="desa_kel_button">
+                                <span id="desa_kel_label" class="truncate">{{ request('desa_kel') ?? 'Semua Desa/Kel' }}</span>
+                                <i class="fas fa-chevron-down text-gray-500 ml-2"></i>
                             </div>
                             <div class="custom-dropdown-options" id="desa_kel_options">
-                                <div class="custom-dropdown-option" data-value="">Semua Desa/Kelurahan</div>
+                                <div class="custom-dropdown-option" data-value="">Semua Desa/Kel</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Posyandu --}}
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Posyandu</label>
+                        <div class="custom-dropdown-container">
+                            <input type="hidden" id="posyandu" name="posyandu" value="{{ request('posyandu') }}">
+                            <div class="custom-dropdown-button" id="posyandu_button">
+                                <span id="posyandu_label" class="truncate">{{ request('posyandu') ?? 'Semua Posyandu' }}</span>
+                                <i class="fas fa-chevron-down text-gray-500 ml-2"></i>
+                            </div>
+                            <div class="custom-dropdown-options" id="posyandu_options">
+                                <div class="custom-dropdown-option" data-value="">Semua Posyandu</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {{-- Tombol Tampilkan --}}
-                <div class="mt-4 flex justify-end">
-                    <button type="submit" class="inline-flex items-center text-xs font-bold btn-filter">
-                        <i class="fas fa-eye mr-2"></i> Tampilkan
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-[#009688] hover:bg-[#00796b] text-white font-bold py-3 px-8 rounded-full custom-outer-shadow transition transform hover:-translate-y-1 w-full sm:w-auto">
+                        <i class="fas fa-filter mr-2"></i> Tampilkan
                     </button>
                 </div>
             </form>
-        </div>
 
-        {{-- RESULT CARDS --}}
-        <div class="p-4 mt-6 space-y-4">
-            {{-- Kartu 1: Usia bayi dalam batas aman (Bayi Sehat) --}}
-            <a href="{{ route('balitas.status.show', ['status' => 'aman', 'kec' => request('kec'), 'puskesmas' => request('puskesmas'), 'desa_kel' => request('desa_kel')]) }}" class="block">
-                <div class="result-card card-green">
-                    <h2 class="result-title">Usia bayi dalam batas aman</h2>
-                    <p class="text-sm text-gray-500 mt-1">USIA < 56 BULAN</p>
-                    <div class="mt-2 text-right text-xs font-bold text-green-600">Total: {{ $aman }}</div>
-                </div>
-            </a>
+            {{-- CONTENT: STATUS CARDS --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                
+                {{-- Card Aman --}}
+                <a href="{{ route('balitas.status.show', ['status' => 'aman', 'kec' => request('kec'), 'puskesmas' => request('puskesmas'), 'desa_kel' => request('desa_kel'), 'posyandu' => request('posyandu')]) }}" class="group block">
+                    <div class="relative overflow-hidden bg-white border-2 border-green-500 rounded-2xl p-6 transition-all duration-300 transform group-hover:scale-105 group-hover:shadow-xl custom-outer-shadow">
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-green-500 rounded-full opacity-10 group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="flex items-center justify-between relative z-10">
+                            <div>
+                                <h2 class="text-2xl font-black text-gray-800 mb-1">BAYI SEHAT</h2>
+                                <p class="text-green-600 font-bold bg-green-100 px-3 py-1 rounded-full inline-block text-sm">Aman</p>
+                                <p class="text-gray-500 text-sm mt-2 font-medium">Usia < 58 bulan</p>
+                            </div>
+                            <div class="w-16 h-16 rounded-2xl bg-green-500 flex items-center justify-center text-white shadow-lg group-hover:bg-green-600 transition-colors">
+                                <span class="text-2xl font-bold">{{ $aman }}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-100 flex justify-end">
+                            <span class="text-green-600 font-bold text-sm flex items-center group-hover:underline">
+                                Lihat Detail <i class="fas fa-arrow-right ml-2"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
 
-            {{-- Kartu 2: Usia bayi diambang batas aman (Bayi Hampir Batas) --}}
-            <a href="{{ route('balitas.status.show', ['status' => 'mendekati', 'kec' => request('kec'), 'puskesmas' => request('puskesmas'), 'desa_kel' => request('desa_kel')]) }}" class="block">
-                <div class="result-card card-yellow">
-                    <h2 class="result-title">Usia bayi diambang batas aman</h2>
-                    <p class="text-sm text-gray-500 mt-1">USIA < 56 BULAN</p>
-                    <div class="mt-2 text-right text-xs font-bold text-yellow-600">Total: {{ $mendekati }}</div>
-                </div>
-            </a>
+                {{-- Card Mendekati --}}
+                <a href="{{ route('balitas.status.show', ['status' => 'mendekati', 'kec' => request('kec'), 'puskesmas' => request('puskesmas'), 'desa_kel' => request('desa_kel'), 'posyandu' => request('posyandu')]) }}" class="group block">
+                    <div class="relative overflow-hidden bg-white border-2 border-yellow-400 rounded-2xl p-6 transition-all duration-300 transform group-hover:scale-105 group-hover:shadow-xl custom-outer-shadow">
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-yellow-400 rounded-full opacity-10 group-hover:scale-150 transition-transform duration-500"></div>
+                        
+                        <div class="flex items-center justify-between relative z-10">
+                            <div>
+                                <h2 class="text-2xl font-black text-gray-800 mb-1">HAMPIR BATAS</h2>
+                                <p class="text-yellow-600 font-bold bg-yellow-100 px-3 py-1 rounded-full inline-block text-sm">Mendekati</p>
+                                <p class="text-gray-500 text-sm mt-2 font-medium">Usia 58 - 59 bulan</p>
+                            </div>
+                            <div class="w-16 h-16 rounded-2xl bg-yellow-400 flex items-center justify-center text-white shadow-lg group-hover:bg-yellow-500 transition-colors">
+                                <span class="text-2xl font-bold">{{ $mendekati }}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-100 flex justify-end">
+                            <span class="text-yellow-600 font-bold text-sm flex items-center group-hover:underline">
+                                Lihat Detail <i class="fas fa-arrow-right ml-2"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
             
-            {{-- Kartu 3: Usia bayi melewati batas pengawasan (Bayi Lewat Batas) --}}
-            <a href="{{ route('balitas.status.show', ['status' => 'lewat', 'kec' => request('kec'), 'puskesmas' => request('puskesmas'), 'desa_kel' => request('desa_kel')]) }}" class="block">
-                <div class="result-card card-red">
-                    <h2 class="result-title">Usia bayi melewati batas pengawasan</h2>
-                    <p class="text-sm text-gray-500 mt-1">USIA < 56 BULAN</p>
-                    <div class="mt-2 text-right text-xs font-bold text-red-600">Total: {{ $lewat ?? 0 }}</div>
+            @if($aman === 0 && $mendekati === 0 && $lewat === 0)
+                <div class="text-center py-10 mt-6 bg-gray-50 rounded-xl border border-gray-200">
+                    <i class="fas fa-inbox text-gray-300 text-5xl mb-4"></i>
+                    <p class="text-gray-500 font-bold">Tidak ada data balita yang ditemukan dengan filter ini.</p>
                 </div>
-            </a>
-            
-            {{-- Pesan Tidak Ada Data (dipertahankan) --}}
-            @if($aman === 0 && $mendekati === 0 && ($lewat ?? 0) === 0)
-                <div class="text-center text-gray-500 font-semibold pt-4">Tidak ada data balita.</div>
             @endif
+
         </div>
-        
-        {{-- FOOTER HOME BUTTON - Dipindahkan ke dalam flow konten --}}
-        <div class="footer-home">
-            <a href="{{ url('/') }}" class="home-button text-teal-600 hover:text-teal-800 transition-colors duration-200">
-                <i class="fas fa-home text-xl"></i>
-            </a>
-        </div>
-        
     </div>
     
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Data untuk dropdown filter (TIDAK BERUBAH)
+            // --- DATA LOKASI LENGKAP (Sama seperti index.blade.php) ---
             const dataLokasi = {
                 "BATU": {
                     "BATU": {
@@ -384,47 +354,33 @@
                 }
             };
 
-            const kecSelect = document.getElementById('kec_val');
+            const kecSelect = document.getElementById('kec');
+            const puskesmasSelect = document.getElementById('puskesmas');
+            const desaKelSelect = document.getElementById('desa_kel');
+            const posyanduSelect = document.getElementById('posyandu');
+
             const kecButton = document.getElementById('kec_button');
-            const kecOptions = document.getElementById('kec_options');
-            const kecLabel = document.getElementById('kec_label');
-            
-            const puskesmasSelect = document.getElementById('puskesmas_val');
             const puskesmasButton = document.getElementById('puskesmas_button');
-            const puskesmasOptions = document.getElementById('puskesmas_options');
-            const puskesmasLabel = document.getElementById('puskesmas_label');
-
-            const desaKelSelect = document.getElementById('desa_kel_val');
             const desaKelButton = document.getElementById('desa_kel_button');
-            const desaKelOptions = document.getElementById('desa_kel_options');
-            const desaKelLabel = document.getElementById('desa_kel_label');
+            const posyanduButton = document.getElementById('posyandu_button');
 
-            // Fungsi untuk mengisi custom dropdown
-            function populateCustomDropdown(container, optionsData, placeholder, selectedValue) {
-                const optionsDiv = container.querySelector('.custom-dropdown-options');
-                const buttonSpan = container.querySelector('span');
+            const kecOptionsDiv = document.getElementById('kec_options');
+            const puskesmasOptionsDiv = document.getElementById('puskesmas_options');
+            const desaKelOptionsDiv = document.getElementById('desa_kel_options');
+            const posyanduOptionsDiv = document.getElementById('posyandu_options');
 
+            function populateCustomDropdown(optionsDiv, optionsData, placeholder) {
                 optionsDiv.innerHTML = `<div class="custom-dropdown-option" data-value="">${placeholder}</div>`;
                 optionsData.forEach(option => {
                     optionsDiv.innerHTML += `<div class="custom-dropdown-option" data-value="${option}">${option}</div>`;
                 });
-
-                if (selectedValue && selectedValue !== '') {
-                    buttonSpan.textContent = selectedValue;
-                } else {
-                    buttonSpan.textContent = placeholder;
-                }
             }
-            
-            // Fungsi untuk menambahkan listener pada custom dropdown
+
             function addDropdownListeners(button, optionsDiv, hiddenInput, labelSpan, placeholder, dataMap) {
                 button.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    // Tutup dropdown lain sebelum membuka ini
-                    document.querySelectorAll('.custom-dropdown-options.show').forEach(openDiv => {
-                        if (openDiv !== optionsDiv) {
-                            openDiv.classList.remove('show');
-                        }
+                    document.querySelectorAll('.custom-dropdown-options').forEach(el => {
+                        if(el !== optionsDiv) el.classList.remove('show');
                     });
                     optionsDiv.classList.toggle('show');
                 });
@@ -437,52 +393,71 @@
                         labelSpan.textContent = text;
                         optionsDiv.classList.remove('show');
                         
-                        if (hiddenInput.id === 'kec_val') {
+                        // Cascade Logic
+                        if (hiddenInput.id === 'kec') {
                             const kecValue = hiddenInput.value;
                             const puskesmasOptionsData = kecValue ? Object.keys(dataMap[kecValue]) : [];
-                            populateCustomDropdown(document.getElementById('puskesmas_button').parentElement, puskesmasOptionsData, 'Semua Puskesmas', '');
-                            puskesmasSelect.value = '';
+                            populateCustomDropdown(puskesmasOptionsDiv, puskesmasOptionsData, 'Semua Puskesmas');
+                            resetDropdown('puskesmas', 'Semua Puskesmas');
+                            resetDropdown('desa_kel', 'Semua Desa/Kel');
+                            resetDropdown('posyandu', 'Semua Posyandu');
                             
-                            populateCustomDropdown(document.getElementById('desa_kel_button').parentElement, [], 'Semua Desa/Kelurahan', '');
-                            desaKelSelect.value = '';
-                        } else if (hiddenInput.id === 'puskesmas_val') {
-                            const kecValue = kecSelect.value;
+                        } else if (hiddenInput.id === 'puskesmas') {
+                            const kecValue = document.getElementById('kec').value;
                             const puskesmasValue = hiddenInput.value;
                             const desaKelOptionsData = (kecValue && puskesmasValue && dataMap[kecValue] && dataMap[kecValue][puskesmasValue]) ? Object.keys(dataMap[kecValue][puskesmasValue]) : [];
-                            populateCustomDropdown(document.getElementById('desa_kel_button').parentElement, desaKelOptionsData, 'Semua Desa/Kelurahan', '');
-                            desaKelSelect.value = '';
+                            populateCustomDropdown(desaKelOptionsDiv, desaKelOptionsData, 'Semua Desa/Kel');
+                            resetDropdown('desa_kel', 'Semua Desa/Kel');
+                            resetDropdown('posyandu', 'Semua Posyandu');
+                            
+                        } else if (hiddenInput.id === 'desa_kel') {
+                             const kecValue = document.getElementById('kec').value;
+                             const puskesmasValue = document.getElementById('puskesmas').value;
+                             const desaValue = hiddenInput.value;
+                             const posyanduOptionsData = (kecValue && puskesmasValue && desaValue && dataMap[kecValue][puskesmasValue][desaValue]) ? dataMap[kecValue][puskesmasValue][desaValue] : [];
+                             populateCustomDropdown(posyanduOptionsDiv, posyanduOptionsData, 'Semua Posyandu');
+                             resetDropdown('posyandu', 'Semua Posyandu');
                         }
                     }
                 });
-
-                window.addEventListener('click', function() {
-                    optionsDiv.classList.remove('show');
-                });
+            }
+            
+            function resetDropdown(id, placeholder) {
+                 document.getElementById(id).value = '';
+                 document.getElementById(id + '_label').textContent = placeholder;
             }
 
-            // Inisialisasi Dropdown
+            window.addEventListener('click', function() {
+                document.querySelectorAll('.custom-dropdown-options').forEach(el => el.classList.remove('show'));
+            });
+
+            // Init Dropdowns
             const kecOptionsData = Object.keys(dataLokasi);
-            const initialKecValue = kecSelect.value;
-            populateCustomDropdown(kecButton.parentElement, kecOptionsData, 'Semua Kecamatan', initialKecValue);
-            addDropdownListeners(kecButton, kecOptions, kecSelect, kecLabel, 'Semua Kecamatan', dataLokasi);
-
-            if (initialKecValue) {
-                const puskesmasOptionsData = Object.keys(dataLokasi[initialKecValue]);
-                const initialPuskesmasValue = puskesmasSelect.value;
-                populateCustomDropdown(puskesmasButton.parentElement, puskesmasOptionsData, 'Semua Puskesmas', initialPuskesmasValue);
-                addDropdownListeners(puskesmasButton, puskesmasOptions, puskesmasSelect, puskesmasLabel, 'Semua Puskesmas', dataLokasi);
-
-                if (initialPuskesmasValue) {
-                    const desaKelOptionsData = Object.keys(dataLokasi[initialKecValue][initialPuskesmasValue]);
-                    const initialDesaKelValue = desaKelSelect.value;
-                    populateCustomDropdown(desaKelButton.parentElement, desaKelOptionsData, 'Semua Desa/Kelurahan', initialDesaKelValue);
-                    addDropdownListeners(desaKelButton, desaKelOptions, desaKelSelect, desaKelLabel, 'Semua Desa/Kelurahan', dataLokasi);
-                } else {
-                     addDropdownListeners(desaKelButton, desaKelOptions, desaKelSelect, desaKelLabel, 'Semua Desa/Kelurahan', dataLokasi);
+            populateCustomDropdown(kecOptionsDiv, kecOptionsData, 'Semua Kecamatan');
+            addDropdownListeners(kecButton, kecOptionsDiv, kecSelect, document.getElementById('kec_label'), 'Semua Kecamatan', dataLokasi);
+            
+            // Re-populate if has request value (Logic Pemulihan State setelah submit)
+            if ('{{ request('kec') }}') {
+                const pkData = Object.keys(dataLokasi['{{ request('kec') }}']);
+                populateCustomDropdown(puskesmasOptionsDiv, pkData, 'Semua Puskesmas');
+                addDropdownListeners(puskesmasButton, puskesmasOptionsDiv, puskesmasSelect, document.getElementById('puskesmas_label'), 'Semua Puskesmas', dataLokasi);
+                
+                if ('{{ request('puskesmas') }}') {
+                    const dkData = Object.keys(dataLokasi['{{ request('kec') }}']['{{ request('puskesmas') }}']);
+                    populateCustomDropdown(desaKelOptionsDiv, dkData, 'Semua Desa/Kel');
+                    addDropdownListeners(desaKelButton, desaKelOptionsDiv, desaKelSelect, document.getElementById('desa_kel_label'), 'Semua Desa/Kel', dataLokasi);
+                    
+                    if ('{{ request('desa_kel') }}') {
+                         const posData = dataLokasi['{{ request('kec') }}']['{{ request('puskesmas') }}']['{{ request('desa_kel') }}'];
+                         populateCustomDropdown(posyanduOptionsDiv, posData, 'Semua Posyandu');
+                         addDropdownListeners(posyanduButton, posyanduOptionsDiv, posyanduSelect, document.getElementById('posyandu_label'), 'Semua Posyandu', dataLokasi);
+                    }
                 }
             } else {
-                addDropdownListeners(puskesmasButton, puskesmasOptions, puskesmasSelect, puskesmasLabel, 'Semua Puskesmas', dataLokasi);
-                addDropdownListeners(desaKelButton, desaKelOptions, desaKelSelect, desaKelLabel, 'Semua Desa/Kelurahan', dataLokasi);
+                // Attach listeners even if empty
+                addDropdownListeners(puskesmasButton, puskesmasOptionsDiv, puskesmasSelect, document.getElementById('puskesmas_label'), 'Semua Puskesmas', dataLokasi);
+                addDropdownListeners(desaKelButton, desaKelOptionsDiv, desaKelSelect, document.getElementById('desa_kel_label'), 'Semua Desa/Kel', dataLokasi);
+                addDropdownListeners(posyanduButton, posyanduOptionsDiv, posyanduSelect, document.getElementById('posyandu_label'), 'Semua Posyandu', dataLokasi);
             }
         });
     </script>
